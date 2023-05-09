@@ -1,5 +1,5 @@
 <script lang="ts">
-    export interface Reminder {
+    export interface IReminder {
         title: string;
         isDone: boolean;
         assignedCategories: string[];
@@ -13,20 +13,28 @@
     export let assignedLists: []
     export let assignedTags: []
 
-    export let markAsDone = () => void
+    let isOpen = false
 </script>
 
 <div
-        class="flex cursor-pointer items-center gap-4 transition-all {isDone
-		? 'line-through'
-		: ''}"
-        on:mousedown={() => markAsDone()}
+        class="grid gap-2"
+        on:mousedown={() => isOpen = !isOpen}
 >
-	<span class="flex h-4 w-4 items-center justify-center rounded-full border">
+    <header class="flex cursor-pointer items-center gap-4 transition-all {isDone
+		? 'line-through'
+		: ''}">
+		<span class="flex h-4 w-4 items-center justify-center rounded-full border" on:mousedown={() => markAsDone()}>
 		<span
                 class="h-3 w-3 rounded-full bg-blue-400 transition-all {isDone
 				? 'scale-100'
 				: 'scale-0'}"></span>
 	</span>
-    <h2 class={isDone ? 'opacity-30' : 'opacity-100'}>{title}</h2>
+        <h2 class={isDone ? 'opacity-30' : 'opacity-100'}>{title}</h2>
+    </header>
+
+    {#if isOpen}
+        <div class="pl-8">
+            Show isOpen content
+        </div>
+    {/if}
 </div>

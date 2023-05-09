@@ -1,13 +1,6 @@
 <script lang="ts">
     import Reminder from "../components/Reminder.svelte";
-
-    interface Reminder {
-        title: string;
-        isDone: boolean;
-        assignedCategories: string[];
-        assignedLists: string[];
-        assignedTags: string[];
-    }
+    import type {IReminder} from "../components/Reminder.svelte";
 
     interface List {
         title: string;
@@ -57,10 +50,10 @@
 
     let tags = ['All tags'];
 
-    let activeList: ActiveList = {title: 'Reminders', type: 'List'};
+    let activeList: ActiveList = {title: 'Today', type: 'Category'};
     let searchValue = '';
 
-    let reminders: Reminder[] = [
+    let reminders: IReminder[] = [
         {
             title: 'A first reminder',
             isDone: false,
