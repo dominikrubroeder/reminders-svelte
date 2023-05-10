@@ -17,7 +17,7 @@
 
 	interface ActiveList {
 		title: string;
-		type: 'List' | 'Tag' | 'Category';
+		type: 'List' | 'Tag' | 'Category' | 'Priority';
 	}
 
 	let categories: Category[] = [
@@ -48,6 +48,8 @@
 		},
 		{ title: 'Another list', backgroundColor: 'bg-red-400', textColor: 'text-white' }
 	];
+
+	let priorities = ['!', '!!', '!!!']
 
 	let activeList: ActiveList = { title: 'Today', type: 'Category' };
 	let searchValue = '';
@@ -190,6 +192,26 @@
 				{/each}
 			</ul>
 		</section>
+
+		<section class="grid gap-2">
+			<h2 class="text-xs">Priority</h2>
+
+			<ul class="flex gap-1 flex-wrap">
+				{#each priorities as priority}
+					<li>
+						<div
+								class="cursor-pointer rounded px-2.5 py-1.5 text-sm {priority === activeList.title
+								? 'bg-blue-400'
+								: 'bg-gray-200'}"
+								on:mousedown={() => (activeList = { title: priority, type: 'Priority' })}
+
+						>
+							{priority}
+						</div>
+					</li>
+				{/each}
+			</ul>
+		</section>
 	</aside>
 
 	<section class="grid flex-1 content-start gap-8 overflow-x-hidden overflow-y-scroll p-4">
@@ -208,7 +230,7 @@
 
 		<ul class="grid gap-4">
 			{#each reminders as reminder, i (reminder.title + i)}
-				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) && reminder.title.includes(searchValue)}
+				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) || reminder.priority === activeList.title && reminder.title.includes(searchValue)}
 					{#if !(reminder.isDone && hideDone)}
 						<li>
 							<Reminder {reminder} markAsDone="{() => markAsDone(reminder.title)}" />
