@@ -5,7 +5,8 @@
 		assignedCategories: string[];
 		assignedLists: string[];
 		assignedTags: string[];
-		priority: null | '!' | '!!' | '!!!'
+		priority: null | '!' | '!!' | '!!!';
+		notes: string;
 	}
 
 	export let title = 'A reminder';
@@ -14,13 +15,14 @@
 	export let assignedLists = [];
 	export let assignedTags = [];
 	export let priority = null
+	export let notes = null
 
 	export let markAsDone: (title: string) => void
 </script>
 
 <div class="grid gap-2">
 	<header
-		class="flex cursor-pointer items-center gap-4 transition-all {isDone ? 'line-through' : ''}"
+		class="flex cursor-pointer items-center gap-4"
 		on:mousedown={markAsDone}
 	>
 		<span
@@ -30,9 +32,15 @@
 		</span>
 		<div class="flex gap-1">
 			{#if priority}<span>{priority}</span>{/if}
-			<h2 class={isDone ? 'opacity-30' : 'opacity-100'}>{title}</h2>
+			<h2 class="{isDone ? 'text-gray-400 line-through' : 'opacity-100 text-gray-900'}">{title}</h2>
 		</div>
 	</header>
+
+	{#if assignedTags.length >= 1}
+		<p class="pl-8 text-xs text-gray-400">
+			{#if notes}<p>{notes}</p>{/if}
+		</p>
+	{/if}
 
 	{#if assignedTags.length >= 1}
 		<ul class="flex gap-2 pl-8">

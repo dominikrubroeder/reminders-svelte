@@ -58,7 +58,8 @@
 			assignedCategories: ['All'],
 			assignedLists: [],
 			assignedTags: ['development', 'svelte'],
-			priority: '!'
+			priority: '!',
+			notes: 'This is a note'
 		},
 		{
 			title: 'Second reminder',
@@ -66,7 +67,8 @@
 			assignedCategories: ['All'],
 			assignedLists: [],
 			assignedTags: ['food'],
-			priority: '!!'
+			priority: '!!',
+			notes: 'Some more notes here'
 		}
 	];
 
