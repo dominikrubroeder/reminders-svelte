@@ -1,6 +1,7 @@
 <script lang="ts">
-	import Reminder from '../components/Reminder.svelte';
-	import type { IReminder } from '../components/Reminder.svelte';
+	import Reminder from '../components/Reminder/index.svelte';
+	import type {IReminder} from "../components/Reminder/Reminder";
+	import Toggle from "../components/Toggle.svelte";
 
 	interface List {
 		title: string;
@@ -74,6 +75,8 @@
 
 	$: tags = ['All tags', ...reminders.map(reminder => reminder.assignedTags).flat()]
 
+	export let hideDone = false
+
 	function addReminder() {
 		reminders = [
 			...reminders,
@@ -82,7 +85,9 @@
 				isDone: false,
 				assignedCategories: ['All'],
 				assignedLists: [],
-				assignedTags: []
+				assignedTags: [],
+				priority: null,
+				notes: null,
 			}
 		];
 	}
@@ -99,6 +104,8 @@
 			}
 		});
 	}
+
+	$: console.log(hideDone)
 </script>
 
 <main class="flex h-screen overflow-hidden">
@@ -188,8 +195,12 @@
 	</aside>
 
 	<section class="grid flex-1 content-start gap-8 overflow-x-hidden overflow-y-scroll p-4">
-		<header>
+		<header class="flex gap-4 items-center justify-between flex-wrap">
 			<button on:click={addReminder}>+</button>
+			<div class="flex gap-2 items-center text-xs">
+				Hide done
+				<Toggle {hideDone} />
+			</div>
 		</header>
 
 		<h1 class="text-3xl font-bold flex gap-0">
@@ -201,7 +212,7 @@
 			{#each reminders as reminder, i (reminder.title + i)}
 				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) && reminder.title.includes(searchValue)}
 					<li>
-						<Reminder {...reminder} markAsDone="{() => markAsDone(reminder.title)}" />
+						<Reminder {reminder} markAsDone="{() => markAsDone(reminder.title)}" />
 						<hr class="ml-8 mt-4" />
 					</li>
 				{/if}
