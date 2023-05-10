@@ -13,6 +13,10 @@
 	export let markAsDone: (title: string) => void
 	let isEditMode = false
 	let newTag = ""
+
+	function autofocus(input){
+		input.focus()
+	}
 </script>
 
 <div class="grid gap-2">
@@ -32,7 +36,7 @@
 
 				<div class="relative">
 					{#if isEditMode}
-						<input bind:value={reminder.title} class="bg-transparent outline-none w-full line-through" autofocus />
+						<input bind:value={reminder.title} class="bg-transparent outline-none w-full line-through" use:autofocus />
 						{:else}
 						<h2 class="{reminder.isDone ? 'text-gray-400 line-through' : 'opacity-100 text-gray-900'}">{reminder.title}</h2>
 					{/if}
