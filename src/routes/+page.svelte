@@ -57,14 +57,16 @@
 			isDone: false,
 			assignedCategories: ['All'],
 			assignedLists: [],
-			assignedTags: ['development', 'svelte']
+			assignedTags: ['development', 'svelte'],
+			priority: '!'
 		},
 		{
 			title: 'Second reminder',
 			isDone: true,
 			assignedCategories: ['All'],
 			assignedLists: [],
-			assignedTags: ['food']
+			assignedTags: ['food'],
+			priority: '!!'
 		}
 	];
 
