@@ -104,8 +104,6 @@
 			}
 		});
 	}
-
-	$: console.log(hideDone)
 </script>
 
 <main class="flex h-screen overflow-hidden">
@@ -199,7 +197,7 @@
 			<button on:click={addReminder}>+</button>
 			<div class="flex gap-2 items-center text-xs">
 				Hide done
-				<Toggle {hideDone} />
+				<Toggle onClick="{() => hideDone = !hideDone}" isActive={hideDone} />
 			</div>
 		</header>
 
@@ -211,10 +209,12 @@
 		<ul class="grid gap-4">
 			{#each reminders as reminder, i (reminder.title + i)}
 				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) && reminder.title.includes(searchValue)}
-					<li>
-						<Reminder {reminder} markAsDone="{() => markAsDone(reminder.title)}" />
-						<hr class="ml-8 mt-4" />
-					</li>
+					{#if !(reminder.isDone && hideDone)}
+						<li>
+							<Reminder {reminder} markAsDone="{() => markAsDone(reminder.title)}" />
+							<hr class="ml-8 mt-4" />
+						</li>
+					{/if}
 				{/if}
 			{/each}
 		</ul>
