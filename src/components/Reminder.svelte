@@ -14,16 +14,17 @@
 	export let assignedLists = [];
 	export let assignedTags = [];
 	export let priority = null
+
+	export let markAsDone: (title: string) => void
 </script>
 
 <div class="grid gap-2">
 	<header
 		class="flex cursor-pointer items-center gap-4 transition-all {isDone ? 'line-through' : ''}"
+		on:mousedown={markAsDone}
 	>
 		<span
-			class="flex h-4 w-4 items-center justify-center rounded-full border"
-			on:mousedown={() => markAsDone()}
-		>
+			class="flex h-4 w-4 items-center justify-center rounded-full border">
 			<span
 				class="h-3 w-3 rounded-full bg-blue-400 transition-all {isDone ? 'scale-100' : 'scale-0'}"></span>
 		</span>

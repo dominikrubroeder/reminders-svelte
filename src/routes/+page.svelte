@@ -199,7 +199,7 @@
 			{#each reminders as reminder, i (reminder.title + i)}
 				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) && reminder.title.includes(searchValue)}
 					<li>
-						<Reminder {...reminder} on:mousedown />
+						<Reminder {...reminder} markAsDone="{() => markAsDone(reminder.title)}" />
 						<hr class="ml-8 mt-4" />
 					</li>
 				{/if}
