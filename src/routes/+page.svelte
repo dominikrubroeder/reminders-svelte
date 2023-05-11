@@ -1,49 +1,27 @@
 <script lang="ts">
-	import type {IReminder} from "../components/Reminder/reminders-store";
-	import remindersStore from "../components/Reminder/reminders-store";
-	import Reminder from '../components/Reminder/index.svelte';
-	import Toggle from "../components/Toggle.svelte";
-	import type {IList} from "../components/List/lists-store";
-	import listsStore from "../components/List/lists-store";
-	import List from "../components/List/index.svelte";
+    import type {IReminder} from "../components/Reminder/reminders-store";
+    import remindersStore from "../components/Reminder/reminders-store";
+    import Reminder from '../components/Reminder/index.svelte';
+    import Toggle from "../components/Toggle.svelte";
+    import type {IList} from "../components/List/lists-store";
+    import listsStore from "../components/List/lists-store";
+    import List from "../components/List/index.svelte";
+    import {categories} from "../components/Category/categories-store";
+    import Category from "../components/Category/index.svelte";
+    import {priorities} from "../components/Priority/priorities-store";
 
-	interface Category {
-        title: string;
-        backgroundColor: string;
-        textColor: string;
-    }
+    let reminders: IReminder[] = []
+    let lists: IList[] = []
+    let tags: string[] = []
+
+    let searchValue = '';
 
     interface ActiveList {
         title: string;
         type: 'List' | 'Tag' | 'Category' | 'Priority';
     }
 
-    let categories: Category[] = [
-        {
-            title: 'Today',
-            backgroundColor: 'bg-blue-400',
-            textColor: 'text-white'
-        },
-        {title: 'Planned', backgroundColor: 'bg-red-400', textColor: 'text-white'},
-        {
-            title: 'All',
-            backgroundColor: 'bg-gray-700',
-            textColor: 'text-white'
-        },
-        {title: 'Marked', backgroundColor: 'bg-orange-400', textColor: 'text-white'},
-        {
-            title: 'Done',
-            backgroundColor: 'bg-slate-600',
-            textColor: 'text-white'
-        }
-    ];
-    let reminders: IReminder[] = []
-    let lists: IList[] = []
-    let tags: string[] = []
-    let priorities = ['!', '!!', '!!!']
-
-    let searchValue = '';
-    let activeList: ActiveList = {title: 'Today', type: 'Category'};
+    let activeList: ActiveList = {title: 'All', type: 'Category'};
 
     export let hideDone = false
 
@@ -85,26 +63,7 @@
                 <ul class="grid grid-cols-2 gap-2">
                     {#each categories as category}
                         <li>
-                            <div
-                                    class="grid cursor-pointer gap-1 rounded-2xl p-4 transition-all {category.title ===
-							activeList.title
-								? category.backgroundColor
-								: 'bg-gray-200'}"
-                                    on:mousedown={() => (activeList = { title: category.title, type: 'Category' })}
-                            >
-                                <div class="flex items-center justify-between gap-4">
-								<span
-                                        class="h-5 w-5 {category.title === activeList.title
-										? 'bg-white'
-										: category.backgroundColor} shrink-0 rounded-full"></span>
-                                    <div class={category.title === activeList.title ? 'text-white' : ''}>
-                                        {reminders.filter((reminder) => reminder.assignedLists.includes(category)).length}
-                                    </div>
-                                </div>
-                                <h2 class="font-bold {category.title === activeList.title ? 'text-white' : ''}">
-                                    {category.title}
-                                </h2>
-                            </div>
+                            <Category {category}/>
                         </li>
                     {/each}
                 </ul>
