@@ -2,50 +2,29 @@
     import type {IReminder} from "../components/Reminder/reminders-store";
     import remindersStore from "../components/Reminder/reminders-store";
     import Reminder from '../components/Reminder/index.svelte';
-    import Toggle from "../components/Toggle.svelte";
     import type {IList} from "../components/List/lists-store";
     import listsStore from "../components/List/lists-store";
     import List from "../components/List/index.svelte";
     import {categories} from "../components/Category/categories-store";
     import Category from "../components/Category/index.svelte";
     import {priorities} from "../components/Priority/priorities-store";
+    import Header from "../components/Header/index.svelte";
+    import type {IActiveTitle} from "../components/Header/ActiveTitle/active-title-store";
+    import activeTitleStore from "../components/Header/ActiveTitle/active-title-store";
 
     let reminders: IReminder[] = []
     let lists: IList[] = []
     let tags: string[] = []
+    let activeTitle: IActiveTitle
 
     let searchValue = '';
-
-    interface ActiveList {
-        title: string;
-        type: 'List' | 'Tag' | 'Category' | 'Priority';
-    }
-
-    let activeList: ActiveList = {title: 'All', type: 'Category'};
-
-    export let hideDone = false
-
-    function addReminder() {
-        remindersStore.update(state => [
-            ...state,
-            {
-                title: 'Newly added reminder',
-                isDone: false,
-                assignedCategories: ['All'],
-                assignedLists: [],
-                assignedTags: [],
-                priority: null,
-                notes: null,
-            }
-        ])
-    }
 
     remindersStore.subscribe(state => {
         reminders = state
         tags = ['All tags', ...state.map(reminder => reminder.assignedTags).flat()]
     })
-
     listsStore.subscribe(state => lists = state)
+    activeTitleStore.subscribe(state => activeTitle = state)
 </script>
 
 <main class="flex h-screen overflow-hidden">
@@ -86,11 +65,8 @@
             <ul class="flex gap-1 flex-wrap">
                 {#each tags as tag}
                     <li>
-                        <div
-                                class="cursor-pointer rounded px-2.5 py-1.5 text-sm {tag.title === activeList.title
-								? 'bg-blue-400'
-								: 'bg-gray-200'}"
-                                on:mousedown={() => (activeList = { title: tag, type: 'Tag' })}
+                        <div class="cursor-pointer rounded px-2.5 py-1.5 text-sm {tag === activeTitle.title ? 'text-white bg-blue-400' : 'bg-gray-200'}"
+                             on:mousedown={() => activeTitleStore.update(() => {return { title: tag, type: 'Tag' }})}
                         >
                             {tag}
                         </div>
@@ -106,10 +82,10 @@
                 {#each priorities as priority}
                     <li>
                         <div
-                                class="cursor-pointer rounded px-2.5 py-1.5 text-sm {priority === activeList.title
-								? 'bg-blue-400'
+                                class="cursor-pointer rounded px-2.5 py-1.5 text-sm {priority === activeTitle.title
+								? 'text-white bg-blue-400'
 								: 'bg-gray-200'}"
-                                on:mousedown={() => (activeList = { title: priority, type: 'Priority' })}
+                                on:mousedown={() => activeTitleStore.update(() => {return { title: priority, type: 'Priority' }})}
 
                         >
                             {priority}
@@ -121,23 +97,13 @@
     </aside>
 
     <section class="grid flex-1 content-start gap-8 overflow-x-hidden overflow-y-scroll p-4">
-        <header class="flex gap-4 items-center justify-between flex-wrap">
-            <button on:click={addReminder}>+</button>
-            <div class="flex gap-2 items-center text-xs">
-                Hide done
-                <Toggle isActive={hideDone} onClick="{() => hideDone = !hideDone}"/>
-            </div>
-        </header>
+        <Header/>
 
-        <h1 class="text-3xl font-bold flex gap-0">
-            {activeList.type === 'Tag' ? '#' : ''}
-            {activeList.title}
-        </h1>
 
         <ul class="grid gap-4">
             {#each reminders as reminder, i (reminder.title + i)}
-                {#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) || reminder.priority === activeList.title && reminder.title.includes(searchValue)}
-                    {#if !(reminder.isDone && hideDone)}
+                {#if (reminder.assignedCategories.includes(activeTitle.title) || reminder.assignedLists.includes(activeTitle.title) || reminder.assignedTags.includes(activeTitle.title)) || reminder.priority === activeTitle.title && reminder.title.includes(searchValue)}
+                    {#if !(reminder.isDone && false)}
                         <li>
                             <Reminder {reminder}/>
                             <hr class="ml-8 mt-4"/>
