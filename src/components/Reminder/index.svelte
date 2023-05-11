@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IReminder } from "./Reminder";
+	import type { IReminder } from "./reminders-store";
 	export let reminder: IReminder = {
 		title: 'A reminder',
 		isDone: false,
@@ -32,7 +32,17 @@
 
 		<div class="flex items-center justify-between gap-4 w-full">
 			<div class="flex gap-1">
-				{#if reminder.priority}<span>{reminder.priority}</span>{/if}
+				{#if reminder.priority}
+					{#if isEditMode}
+						<select>
+							<option value="!">!</option>
+							<option value="!">!</option>
+							<option value="!">!</option>
+						</select>
+						{:else}
+						<span>{reminder.priority}</span>
+					{/if}
+				{/if}
 
 				<div class="relative">
 					{#if isEditMode}

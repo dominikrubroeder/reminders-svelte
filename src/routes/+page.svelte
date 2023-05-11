@@ -1,6 +1,7 @@
 <script lang="ts">
+	import remindersStore from "../components/Reminder/reminders-store";
 	import Reminder from '../components/Reminder/index.svelte';
-	import type {IReminder} from "../components/Reminder/Reminder";
+	import type { IReminder } from "../components/Reminder/reminders-store";
 	import Toggle from "../components/Toggle.svelte";
 
 	interface List {
@@ -39,7 +40,6 @@
 			textColor: 'text-white'
 		}
 	];
-
 	let lists: List[] = [
 		{
 			title: 'Reminders',
@@ -48,40 +48,20 @@
 		},
 		{ title: 'Another list', backgroundColor: 'bg-red-400', textColor: 'text-white' }
 	];
-
+	let reminders: IReminder[] = []
+	let tags: string[] = []
 	let priorities = ['!', '!!', '!!!']
 
-	let activeList: ActiveList = { title: 'Today', type: 'Category' };
 	let searchValue = '';
+	let activeList: ActiveList = { title: 'Today', type: 'Category' };
 
-	let reminders: IReminder[] = [
-		{
-			title: 'A first reminder',
-			isDone: false,
-			assignedCategories: ['All'],
-			assignedLists: [],
-			assignedTags: ['development', 'svelte'],
-			priority: '!',
-			notes: 'This is a note'
-		},
-		{
-			title: 'Second reminder',
-			isDone: true,
-			assignedCategories: ['All'],
-			assignedLists: [],
-			assignedTags: ['food'],
-			priority: '!!',
-			notes: 'Some more notes here'
-		}
-	];
 
-	$: tags = ['All tags', ...reminders.map(reminder => reminder.assignedTags).flat()]
 
 	export let hideDone = false
 
 	function addReminder() {
-		reminders = [
-			...reminders,
+		remindersStore.update(state => [
+				...state,
 			{
 				title: 'Newly added reminder',
 				isDone: false,
@@ -91,20 +71,27 @@
 				priority: null,
 				notes: null,
 			}
-		];
+		])
 	}
 
+	remindersStore.subscribe(state => {
+		reminders = state
+		tags = ['All tags', ...state.map(reminder => reminder.assignedTags).flat()]
+	})
+
 	function markAsDone(reminderTitle: string) {
-		reminders = reminders.map((currReminder) => {
-			if (currReminder.title === reminderTitle) {
-				return {
-					...currReminder,
-					isDone: !currReminder.isDone
-				};
-			} else {
-				return currReminder;
-			}
-		});
+		remindersStore.update((state) => {
+			return state.map((currReminder) => {
+				if (currReminder.title === reminderTitle) {
+					return {
+						...currReminder,
+						isDone: !currReminder.isDone
+					};
+				} else {
+					return currReminder;
+				}
+			})
+		})
 	}
 </script>
 
