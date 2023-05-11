@@ -55,8 +55,6 @@
 	let searchValue = '';
 	let activeList: ActiveList = { title: 'Today', type: 'Category' };
 
-
-
 	export let hideDone = false
 
 	function addReminder() {
@@ -78,21 +76,6 @@
 		reminders = state
 		tags = ['All tags', ...state.map(reminder => reminder.assignedTags).flat()]
 	})
-
-	function markAsDone(reminderTitle: string) {
-		remindersStore.update((state) => {
-			return state.map((currReminder) => {
-				if (currReminder.title === reminderTitle) {
-					return {
-						...currReminder,
-						isDone: !currReminder.isDone
-					};
-				} else {
-					return currReminder;
-				}
-			})
-		})
-	}
 </script>
 
 <main class="flex h-screen overflow-hidden">
@@ -220,7 +203,7 @@
 				{#if (reminder.assignedCategories.includes(activeList.title) || reminder.assignedLists.includes(activeList.title) || reminder.assignedTags.includes(activeList.title)) || reminder.priority === activeList.title && reminder.title.includes(searchValue)}
 					{#if !(reminder.isDone && hideDone)}
 						<li>
-							<Reminder {reminder} markAsDone="{() => markAsDone(reminder.title)}" />
+							<Reminder {reminder} />
 							<hr class="ml-8 mt-4" />
 						</li>
 					{/if}

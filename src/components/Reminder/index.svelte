@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { IReminder } from "./reminders-store";
+	import remindersStore from "./reminders-store";
 	export let reminder: IReminder = {
 		title: 'A reminder',
 		isDone: false,
@@ -10,9 +11,23 @@
 		notes: null
 	}
 
-	export let markAsDone: (title: string) => void
 	let isEditMode = false
 	let newTag = ""
+
+	function markAsDone(reminderTitle: string) {
+		remindersStore.update((state) => {
+			return state.map((currReminder) => {
+				if (currReminder.title === reminderTitle) {
+					return {
+						...currReminder,
+						isDone: !currReminder.isDone
+					};
+				} else {
+					return currReminder;
+				}
+			})
+		})
+	}
 
 	function autofocus(input){
 		input.focus()
@@ -22,7 +37,7 @@
 <div class="grid gap-2">
 	<header
 		class="flex cursor-pointer items-center gap-4 z-40 relative"
-		on:mousedown={markAsDone}
+		on:mousedown={() => markAsDone(reminder.title)}
 	>
 		<span
 			class="flex h-4 w-4 items-center justify-center rounded-full border">
