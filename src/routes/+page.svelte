@@ -11,11 +11,13 @@
     import Header from "../components/Header/index.svelte";
     import type {IActiveTitle} from "../components/Header/ActiveTitle/active-title-store";
     import activeTitleStore from "../components/Header/ActiveTitle/active-title-store";
+    import settingsStore from "../components/Settings/settings-store";
 
     let reminders: IReminder[] = []
     let lists: IList[] = []
     let tags: string[] = []
     let activeTitle: IActiveTitle
+    let hideDone: boolean
 
     let searchValue = '';
 
@@ -25,6 +27,7 @@
     })
     listsStore.subscribe(state => lists = state)
     activeTitleStore.subscribe(state => activeTitle = state)
+    settingsStore.subscribe(state => hideDone = state.hideDone)
 </script>
 
 <main class="flex h-screen overflow-hidden">
@@ -103,7 +106,7 @@
         <ul class="grid gap-4">
             {#each reminders as reminder, i (reminder.title + i)}
                 {#if (reminder.assignedCategories.includes(activeTitle.title) || reminder.assignedLists.includes(activeTitle.title) || reminder.assignedTags.includes(activeTitle.title)) || reminder.priority === activeTitle.title && reminder.title.includes(searchValue)}
-                    {#if !(reminder.isDone && false)}
+                    {#if !(reminder.isDone && hideDone)}
                         <li>
                             <Reminder {reminder}/>
                             <hr class="ml-8 mt-4"/>

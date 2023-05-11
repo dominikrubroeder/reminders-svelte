@@ -12,8 +12,7 @@ const lists: Writable<IList[]> = writable([
 		title: 'Reminders',
 		backgroundColor: 'bg-red-400',
 		textColor: 'text-white'
-	},
-	{ title: 'Another list', backgroundColor: 'bg-red-400', textColor: 'text-white' }
+	}
 ]);
 
 export default lists;
