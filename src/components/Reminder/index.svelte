@@ -90,7 +90,7 @@
             {#if isEditMode}
                 <input bind:value={reminder.url}/>
             {:else}
-                <a href="{reminder.url}" target="_blank" class="{activeTitle.textColor}">{reminder.url}</a>
+                <a href="{reminder.url}" target="_blank" class="text-{activeTitle.accentColor}">{reminder.url}</a>
             {/if}
         </div>
     {/if}

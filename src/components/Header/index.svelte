@@ -30,7 +30,7 @@
         <HideDone/>
     </div>
 
-    <h1 class="text-3xl font-bold flex gap-0">
+    <h1 class="text-3xl font-bold flex gap-0 {activeTitle.textColor}">
         {activeTitle.type === 'Tag' ? '#' : ''}
         {activeTitle.title}
     </h1>
