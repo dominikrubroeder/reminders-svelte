@@ -1,15 +1,17 @@
 <script lang="ts">
-	import type {IReminder} from "./reminders-store";
-	import remindersStore from "./reminders-store";
+    import type {IReminder} from "./reminders-store";
+    import remindersStore from "./reminders-store";
+    import activeTitleStore from "../Header/ActiveTitle/active-title-store";
 
-	export let reminder: IReminder = {
+    export let reminder: IReminder = {
         title: 'A reminder',
         isDone: false,
         assignedCategories: null,
         assignedLists: null,
         assignedTags: null,
         priority: null,
-        notes: null
+        notes: null,
+        url: null
     }
 
     let isEditMode = false
@@ -33,6 +35,9 @@
     function autofocus(input) {
         input.focus()
     }
+
+    let activeTitle
+    activeTitleStore.subscribe(state => activeTitle = state)
 </script>
 
 <div class="grid gap-2">
@@ -68,7 +73,6 @@
                         <h2 class="{reminder.isDone ? 'text-gray-400 line-through' : 'opacity-100 text-gray-900'}">{reminder.title}</h2>
                     {/if}
                 </div>
-
             </div>
 
             <button class="flex items-center z-50" on:click={() => isEditMode = !isEditMode}>
@@ -80,6 +84,14 @@
             </button>
         </div>
     </header>
+
+    {#if reminder.url}
+        {#if isEditMode}
+            <input bind:value={reminder.url}/>
+        {:else}
+            <a href="{reminder.url}" target="_blank" class="pl-8 text-xs {activeTitle.textColor}">{reminder.url}</a>
+        {/if}
+    {/if}
 
     {#if reminder.notes}
         <p class="pl-8 text-xs text-gray-400">
