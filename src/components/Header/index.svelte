@@ -16,6 +16,7 @@
                 assignedTags: [],
                 priority: null,
                 notes: null,
+                url: null
             }
         ])
     }

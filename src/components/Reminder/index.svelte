@@ -74,15 +74,15 @@
                     {/if}
                 </div>
             </div>
-
-            <button class="flex items-center z-50" on:click={() => isEditMode = !isEditMode}>
-                {#if isEditMode}
-                    <span class="text-xs">Done</span>
-                {:else}
-                    <span>...</span>
-                {/if}
-            </button>
         </div>
+
+        <button class="flex items-center z-50" on:click={() => isEditMode = !isEditMode}>
+            {#if isEditMode}
+                <span class="text-xs">Done</span>
+            {:else}
+                <span>...</span>
+            {/if}
+        </button>
     </header>
 
     {#if reminder.url}
