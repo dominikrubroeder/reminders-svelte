@@ -86,17 +86,27 @@
     </header>
 
     {#if reminder.url}
-        {#if isEditMode}
-            <input bind:value={reminder.url}/>
-        {:else}
-            <a href="{reminder.url}" target="_blank" class="pl-8 text-xs {activeTitle.textColor}">{reminder.url}</a>
-        {/if}
+        <div class="pl-8 text-xs">
+            {#if isEditMode}
+                <input bind:value={reminder.url}/>
+            {:else}
+                <a href="{reminder.url}" target="_blank" class="{activeTitle.textColor}">{reminder.url}</a>
+            {/if}
+        </div>
     {/if}
 
     {#if reminder.notes}
-        <p class="pl-8 text-xs text-gray-400">
-            {reminder.notes}
-        </p>
+        <div class="pl-8 text-xs text-gray-400">
+            {#if isEditMode}
+                <p>
+                    <input bind:value={reminder.notes}/>
+                </p>
+            {:else}
+                <p>
+                    {reminder.notes}
+                </p>
+            {/if}
+        </div>
     {/if}
 
     {#if reminder.assignedTags.length >= 1}
