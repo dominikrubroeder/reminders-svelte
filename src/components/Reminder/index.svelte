@@ -55,13 +55,13 @@
             <div class="flex gap-1">
                 {#if reminder.priority}
                     {#if isEditMode}
-                        <select class="bg-none">
+                        <select class="bg-none" bind:value={reminder.priority}>
                             <option value="!">!</option>
                             <option value="!!">!!</option>
                             <option value="!!!">!!!</option>
                         </select>
-                    {:else}
-                        <span>{reminder.priority}</span>
+                    {:else if reminder.priority !== 'none'}
+                        <span class="{activeTitle.textColor}">{reminder.priority}</span>
                     {/if}
                 {/if}
 
