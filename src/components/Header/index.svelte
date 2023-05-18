@@ -14,9 +14,9 @@
                 assignedCategories: ['All'],
                 assignedLists: [],
                 assignedTags: [],
-                priority: null,
-                notes: null,
-                url: null
+                priority: 'none',
+                notes: '',
+                url: ''
             }
         ])
     }
