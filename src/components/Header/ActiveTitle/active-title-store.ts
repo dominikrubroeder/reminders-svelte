@@ -9,7 +9,7 @@ export interface IActiveTitle {
 }
 
 const activeTitle: Writable<IActiveTitle> = writable({
-	title: 'All',
+	title: 'Today',
 	type: 'Category',
 	textColor: 'text-blue-400',
 	backgroundColor: 'bg-blue-400'

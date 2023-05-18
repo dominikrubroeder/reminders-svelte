@@ -4,12 +4,12 @@ import type { Writable } from 'svelte/store';
 export interface IReminder {
 	title: string;
 	isDone: boolean;
-	assignedCategories: null | string[];
-	assignedLists: null | string[];
-	assignedTags: null | string[];
-	priority: null | '!' | '!!' | '!!!';
-	notes: null | string;
-	url: null | string;
+	assignedCategories: string[];
+	assignedLists: string[];
+	assignedTags: string[];
+	priority: 'none' | '!' | '!!' | '!!!';
+	notes: string;
+	url: string;
 }
 
 const reminders: Writable<IReminder[]> = writable([
@@ -31,7 +31,7 @@ const reminders: Writable<IReminder[]> = writable([
 		assignedTags: ['food'],
 		priority: '!!',
 		notes: 'Some more notes here',
-		url: null
+		url: ''
 	}
 ]);
 

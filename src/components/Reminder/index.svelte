@@ -6,12 +6,12 @@
     export let reminder: IReminder = {
         title: 'A reminder',
         isDone: false,
-        assignedCategories: null,
-        assignedLists: null,
-        assignedTags: null,
-        priority: null,
-        notes: null,
-        url: null
+        assignedCategories: [],
+        assignedLists: [],
+        assignedTags: [],
+        priority: 'none',
+        notes: '',
+        url: ''
     }
 
     let isEditMode = false
@@ -55,7 +55,7 @@
             <div class="flex gap-1">
                 {#if reminder.priority}
                     {#if isEditMode}
-                        <select>
+                        <select class="bg-none">
                             <option value="!">!</option>
                             <option value="!!">!!</option>
                             <option value="!!!">!!!</option>
@@ -67,7 +67,8 @@
 
                 <div class="relative">
                     {#if isEditMode}
-                        <input bind:value={reminder.title} class="bg-transparent outline-none w-full line-through"
+                        <input bind:value={reminder.title}
+                               class="bg-transparent outline-none w-full line-through"
                                use:autofocus/>
                     {:else}
                         <h2 class="{reminder.isDone ? 'text-gray-400 line-through' : 'opacity-100 text-gray-900'}">{reminder.title}</h2>
@@ -85,21 +86,19 @@
         </button>
     </header>
 
-    {#if reminder.url}
+    <div class="grid gap-0">
         <div class="pl-8 text-xs">
             {#if isEditMode}
-                <input bind:value={reminder.url}/>
-            {:else}
-                <a href="{reminder.url}" target="_blank" class="text-{activeTitle.accentColor}">{reminder.url}</a>
+                <input bind:value={reminder.url} placeholder="Add URL..."/>
+            {:else if reminder.url !== ''}
+                <a href="{reminder.url}" target="_blank" class="{activeTitle.textColor}">{reminder.url}</a>
             {/if}
         </div>
-    {/if}
 
-    {#if reminder.notes}
         <div class="pl-8 text-xs text-gray-400">
             {#if isEditMode}
                 <p>
-                    <input bind:value={reminder.notes}/>
+                    <input bind:value={reminder.notes} placeholder="Add notes..."/>
                 </p>
             {:else}
                 <p>
@@ -107,16 +106,17 @@
                 </p>
             {/if}
         </div>
-    {/if}
+    </div>
 
     {#if reminder.assignedTags.length >= 1}
         <ul class="flex gap-2 pl-8 flex-wrap items-center">
             {#each reminder.assignedTags as assignedTag}
-                <li class="rounded bg-gray-100 px-3 py-2 text-xs">
+                <li class="rounded bg-gray-100 text-xs">
                     {#if isEditMode}
-                        <input bind:value={assignedTag} class="w-auto bg-transparent"/>
+                        <input bind:value={assignedTag} class="w-auto bg-transparent px-3 py-2"/>
                     {:else}
-                        #{assignedTag}
+                        <span class="block px-3 py-2 cursor-pointer transition hover:bg-gray-200"
+                              on:mousedown={() => activeTitleStore.update(() => {return {title: assignedTag, type: 'Tag', backgroundColor: 'bg-blue-400', textColor: 'text-blue-400'}})}>#{assignedTag}</span>
                     {/if}
                 </li>
             {/each}
@@ -127,7 +127,7 @@
 						reminder.assignedTags = [...reminder.assignedTags, newTag.replaceAll(' ', '')]
 						newTag = ""
 					}}>
-                        <input placeholder="Add Tag" bind:value={newTag}/>
+                        <input placeholder="Add Tag" bind:value={newTag} class="px-3 py-2"/>
                     </form>
                 </li>
             {/if}
