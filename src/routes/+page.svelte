@@ -75,7 +75,7 @@
 								: 'bg-gray-200'}"
                                 on:mousedown={() =>
 								activeTitleStore.update(() => {
-									return { title: tag, type: 'Tag' };
+									return { title: tag, type: 'Tag', textColor: 'text-black', backgroundColor: 'bg-black' };
 								})}
                         >
                             {tag}
@@ -97,7 +97,7 @@
 								: 'bg-gray-200'}"
                                 on:mousedown={() =>
 								activeTitleStore.update(() => {
-									return { title: priority, type: 'Priority' };
+									return { title: priority, type: 'Priority', textColor: 'text-black', backgroundColor: 'bg-black' };
 								})}
                         >
                             {priority}
