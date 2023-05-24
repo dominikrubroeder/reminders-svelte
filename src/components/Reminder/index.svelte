@@ -2,10 +2,12 @@
     import type {IReminder} from "./reminders-store";
     import remindersStore from "./reminders-store";
     import activeTitleStore from "../Header/ActiveTitle/active-title-store";
+    import {Icon, Trash, Pencil, Flag, Check} from "svelte-hero-icons";
 
     export let reminder: IReminder = {
         title: 'A reminder',
         isDone: false,
+        isMarked: false,
         assignedCategories: [],
         assignedLists: [],
         assignedTags: [],
@@ -38,20 +40,44 @@
 
     let activeTitle
     activeTitleStore.subscribe(state => activeTitle = state)
+
+    function checkAsMarked() {
+        isEditMode ? null : markAsDone(reminder.title)
+    }
+
+    function deleteReminder(reminderTitle: string) {
+        remindersStore.update(state => [...state.filter(reminder => reminder.title !== reminderTitle)])
+    }
+
+    function flag(reminderTitle: string) {
+        remindersStore.update((state) => {
+            return state.map((currReminder) => {
+                if (currReminder.title === reminderTitle) {
+                    return {
+                        ...currReminder,
+                        isMarked: !currReminder.isMarked
+                    };
+                } else {
+                    return currReminder;
+                }
+            })
+        })
+    }
 </script>
 
 <div class="grid gap-2">
     <header
             class="flex cursor-pointer items-center gap-4 z-40 relative"
-            on:mousedown={() => markAsDone(reminder.title)}
     >
 		<span
-                class="flex h-4 w-4 items-center justify-center rounded-full border">
+                class="flex h-4 w-4 items-center justify-center rounded-full border shrink-0"
+                on:mousedown={() => markAsDone(reminder.title)}>
 			<span
                     class="h-3 w-3 rounded-full bg-blue-400 transition-all {reminder.isDone ? 'scale-100' : 'scale-0'}"></span>
 		</span>
 
-        <div class="flex items-center justify-between gap-4 w-full">
+        <div class="flex items-center justify-between gap-4 w-full"
+             on:mousedown={checkAsMarked}>
             <div class="flex gap-1">
                 {#if reminder.priority}
                     {#if isEditMode}
@@ -68,7 +94,7 @@
                 <div class="relative">
                     {#if isEditMode}
                         <input bind:value={reminder.title}
-                               class="bg-transparent outline-none w-full line-through"
+                               class="bg-transparent outline-none w-full {reminder.isDone ? 'line-through' : ''}"
                                use:autofocus/>
                     {:else}
                         <h2 class="{reminder.isDone ? 'text-gray-400 line-through' : 'opacity-100 text-gray-900'}">{reminder.title}</h2>
@@ -77,12 +103,20 @@
             </div>
         </div>
 
+        <button class="flex items-center z-50" on:click={() => flag(reminder.title)}>
+            <Icon src="{Flag}" size="16" class="{reminder.isMarked ? 'fill-amber-400' : 'fill-none'}"/>
+        </button>
+
         <button class="flex items-center z-50" on:click={() => isEditMode = !isEditMode}>
             {#if isEditMode}
-                <span class="text-xs">Done</span>
+                <Icon src="{Check}" size="16"/>
             {:else}
-                <span>...</span>
+                <Icon src="{Pencil}" size="16"/>
             {/if}
+        </button>
+
+        <button class="text-xs" on:click={() => deleteReminder(reminder.title)}>
+            <Icon src="{Trash}" size="16" class="text-red-400"/>
         </button>
     </header>
 
