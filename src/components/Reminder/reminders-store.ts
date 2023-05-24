@@ -4,6 +4,7 @@ import type { Writable } from 'svelte/store';
 export interface IReminder {
 	title: string;
 	isDone: boolean;
+	isMarked: boolean;
 	assignedCategories: string[];
 	assignedLists: string[];
 	assignedTags: string[];
@@ -16,6 +17,7 @@ const reminders: Writable<IReminder[]> = writable([
 	{
 		title: 'A first reminder',
 		isDone: false,
+		isMarked: false,
 		assignedCategories: ['All'],
 		assignedLists: [],
 		assignedTags: ['development', 'svelte'],
@@ -26,6 +28,7 @@ const reminders: Writable<IReminder[]> = writable([
 	{
 		title: 'Second reminder',
 		isDone: true,
+		isMarked: true,
 		assignedCategories: ['All'],
 		assignedLists: [],
 		assignedTags: ['food'],
