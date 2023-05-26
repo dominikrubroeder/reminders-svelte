@@ -1,7 +1,7 @@
 <script lang="ts">
     import type {IReminder} from "./reminders-store";
     import remindersStore from "./reminders-store";
-    import activeTitleStore from "../Header/ActiveTitle/active-title-store";
+    import currentListStore from "../CurrentList/current-list-store";
     import {Icon, Trash, Pencil, Flag, Check} from "svelte-hero-icons";
 
     export let reminder: IReminder = {
@@ -39,7 +39,7 @@
     }
 
     let activeTitle
-    activeTitleStore.subscribe(state => activeTitle = state)
+    currentListStore.subscribe(state => activeTitle = state)
 
     function checkAsMarked() {
         isEditMode ? null : markAsDone(reminder.title)
@@ -150,7 +150,7 @@
                         <input bind:value={assignedTag} class="w-auto bg-transparent px-3 py-2"/>
                     {:else}
                         <span class="block px-3 py-2 cursor-pointer transition hover:bg-gray-200"
-                              on:mousedown={() => activeTitleStore.update(() => {return {title: assignedTag, type: 'Tag', backgroundColor: 'bg-blue-400', textColor: 'text-blue-400'}})}>#{assignedTag}</span>
+                              on:mousedown={() => currentListStore.update(() => {return {title: assignedTag, type: 'Tag', backgroundColor: 'bg-blue-400', textColor: 'text-blue-400'}})}>#{assignedTag}</span>
                     {/if}
                 </li>
             {/each}

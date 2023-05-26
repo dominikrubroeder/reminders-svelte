@@ -9,25 +9,27 @@
     import Category from '../components/Category/index.svelte';
     import {priorities} from '../components/Priority/priorities-store';
     import Header from '../components/Header/index.svelte';
-    import type {IActiveTitle} from '../components/Header/ActiveTitle/active-title-store';
-    import activeTitleStore from '../components/Header/ActiveTitle/active-title-store';
+    import type {ICurrentList} from '../components/CurrentList/current-list-store';
+    import currentListStore from '../components/CurrentList/current-list-store';
     import settingsStore from '../components/Settings/settings-store';
     import {slide} from 'svelte/transition';
 
     let reminders: IReminder[] = [];
     let lists: IList[] = [];
     let tags: string[] = [];
-    let activeTitle: IActiveTitle;
+    let activeTitle: ICurrentList;
     let hideDone: boolean;
 
     let searchValue = '';
 
+    currentListStore.subscribe(state => {
+        reminders = state.reminders
+        activeTitle = state
+    });
     remindersStore.subscribe((state) => {
-        reminders = state;
         tags = ['All tags', ...state.map((reminder) => reminder.assignedTags).flat()];
     });
     listsStore.subscribe((state) => (lists = state));
-    activeTitleStore.subscribe((state) => (activeTitle = state));
     settingsStore.subscribe((state) => (hideDone = state.hideDone));
 </script>
 
@@ -74,8 +76,8 @@
 								? 'bg-blue-400 text-white'
 								: 'bg-gray-200'}"
                                 on:mousedown={() =>
-								activeTitleStore.update(() => {
-									return { title: tag, type: 'Tag', textColor: 'text-black', backgroundColor: 'bg-black' };
+								currentListStore.update(() => {
+									return { title: tag, type: 'Tag', textColor: 'text-black', backgroundColor: 'bg-black', reminders: [] };
 								})}
                         >
                             {tag}
@@ -96,8 +98,8 @@
 								? 'bg-blue-400 text-white'
 								: 'bg-gray-200'}"
                                 on:mousedown={() =>
-								activeTitleStore.update(() => {
-									return { title: priority, type: 'Priority', textColor: 'text-black', backgroundColor: 'bg-black' };
+								currentListStore.update(() => {
+									return { title: priority, type: 'Priority', textColor: 'text-black', backgroundColor: 'bg-black', reminders: [] };
 								})}
                         >
                             {priority}

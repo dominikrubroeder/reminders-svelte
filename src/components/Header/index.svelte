@@ -1,6 +1,6 @@
 <script lang="ts">
     import remindersStore from "../Reminder/reminders-store";
-    import activeTitleStore from "./ActiveTitle/active-title-store";
+    import currentListStore from "../CurrentList/current-list-store";
     import HideDone from "../Settings/HideDone.svelte";
 
     let activeTitle;
@@ -11,6 +11,7 @@
             {
                 title: 'Newly added reminder',
                 isDone: false,
+                isMarked: false,
                 assignedCategories: ['All'],
                 assignedLists: [],
                 assignedTags: [],
@@ -21,7 +22,7 @@
         ])
     }
 
-    activeTitleStore.subscribe(state => activeTitle = state)
+    currentListStore.subscribe(state => activeTitle = state)
 </script>
 
 <header class="grid gap-2">
